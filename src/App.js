@@ -1,33 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "./components/Card";
 import Drawer from "./components/Drawer";
 import Header from "./components/Header";
 
-const arr = [
-  {
-    title: "Мужские Кроссовки Nike Blazer Mid Suede",
-    price: 12999,
-    imageUrl: "img/sneakers/sneak1.png",
-  },
-  {
-    title: "Мужские Кроссовки Nike Air Max 270",
-    price: 12999,
-    imageUrl: "img/sneakers/sneak2.png",
-  },
-  {
-    title: "Мужские Кроссовки Nike Blazer Mid Suede",
-    price: 8499,
-    imageUrl: "img/sneakers/sneak3.png",
-  },
-  {
-    title: "Кроссовки Puma X Aka Boku Future Rider",
-    price: 8999,
-    imageUrl: "img/sneakers/sneak4.png",
-  },
-];
-
 function App() {
+  const [items, setItems] = useState([]);
   const [cartOpened, setCartOpened] = useState(false);
+
+  useEffect(() => {
+    fetch(process.env.REACT_APP_ITEMS)
+      .then((res) => {
+        return res.json();
+      })
+      .then((json) => {
+        setItems(json);
+      });
+  }, []);
 
   return (
     <div className="wrapper clear">
@@ -43,8 +31,8 @@ function App() {
           </div>
         </div>
 
-        <div className="d-flex">
-          {arr.map((obj) => (
+        <div className="d-flex flex-wrap">
+          {items.map((obj) => (
             <Card title={obj.title} price={obj.price} imageUrl={obj.imageUrl} />
           ))}
         </div>
