@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import Card from "./components/Card";
 import Drawer from "./components/Drawer";
 import Header from "./components/Header";
@@ -10,16 +11,24 @@ function App() {
   const [cartOpened, setCartOpened] = useState(false);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_ITEMS)
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        setItems(json);
-      });
+    // fetch(process.env.REACT_APP_ITEMS)
+    //   .then((res) => {
+    //     return res.json();
+    //   })
+    //   .then((json) => {
+    //     setItems(json);
+    //   });
+
+    axios.get(process.env.REACT_APP_ITEMS).then((res) => {
+      setItems(res.data);
+    });
+    axios.get(process.env.REACT_APP_CART).then((res) => {
+      setCartItems(res.data);
+    });
   }, []);
 
   const onAddToCart = (obj) => {
+    axios.post(process.env.REACT_APP_CART, obj);
     setCartItems((prev) => [...prev, obj]);
   };
 
